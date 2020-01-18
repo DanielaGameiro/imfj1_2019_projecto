@@ -1,0 +1,225 @@
+# Import pygame into our program
+import pygame
+import pygame.freetype
+import time
+
+from scene import *
+from object3d import *
+from mesh import *
+from material import *
+from color import *
+
+# Define a main function, just to keep things nice and tidy
+def main():
+    # Initialize pygame, with the default parameters
+    pygame.init()
+    pygame.mouse.set_visible(False)
+
+    pygame.event.set_grab(True)
+    mp = pygame.mouse.get_rel()
+
+    # Define the size/resolution of our window
+    res_x = 640
+    res_y = 480
+
+    # Create a window and a display surface
+    screen = pygame.display.set_mode((res_x, res_y))
+
+    # Create a scene
+    scene = Scene("Scene")
+    scene.camera = Camera(False, res_x, res_y)
+
+    # Moves the camera back 2 units
+    scene.camera.position -= vector3(0,-1,-1)
+
+    # Create a pyramid and place it in a scene
+    pyr1 = Object3d("UnknownPyramid")
+    pyr1.scale = vector3(3, 3, 3)
+    pyr1.position = vector3(2, 1.5, 12)
+    pyr1.mesh = Mesh.create_pyramid((1, 1, 1))
+    pyr1.material = Material(color(1,0,1,0), "PyramidMaterial")
+    scene.add_object(pyr1)
+
+    # Create a second object, and add it as a child of the first object
+    # When the first object rotates, this one will also mimic the transform
+    pyr2 = Object3d("UnknownPyramid")
+    pyr2.scale = vector3(11, 11, 11)
+    pyr2.position = vector3(11, 5.5, 17)
+    pyr2.mesh = Mesh.create_pyramid((1, 1, 1))
+    pyr2.material = Material(color(1,1,1,0), "PyramidMaterial")
+    scene.add_object(pyr2)
+
+    # Empty list for objects
+    empty_list = []
+    empty_list.append(pyr1)
+    empty_list.append(pyr2)
+
+    # Specify the rotation of the object. It will rotate 15 degrees around the axis given, 
+    # every second
+    angle = 15
+    axis = vector3(0, 0, 0)
+    
+    # Timer
+    delta_time = 0
+    prev_time = time.time()
+
+    # Keys
+    aKey = False
+    dKey = False
+    eKey = False
+    qKey = False
+    sKey = False
+    wKey = False
+    upKey = False
+    downKey = False
+    leftKey = False
+    rightKey = False
+    pUpKey = False
+    pDownKey = False
+
+    # Keys List
+    keys = [ aKey, dKey, eKey, qKey, sKey, wKey, upKey, downKey, leftKey, rightKey, pUpKey, pDownKey ]
+
+    run = True
+
+    # Game loop, runs forever
+    while (run):
+        # Process OS events
+        for event in pygame.event.get():
+            # Checks if the user closed the window
+            if (event.type == pygame.KEYDOWN):
+
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+
+                if (event.key == pygame.K_a):
+                    aKey = True
+
+                if (event.key == pygame.K_d):
+                    dKey = True
+
+                if (event.key == pygame.K_e):
+                    eKey = True
+
+                if (event.key == pygame.K_q):
+                    qKey = True
+
+                if (event.key == pygame.K_s):
+                    sKey = True
+
+                if (event.key == pygame.K_w):
+                    wKey = True
+
+                if (event.key == pygame.K_UP):
+                    upKey = True
+
+                if (event.key == pygame.K_DOWN):
+                    downKey = True
+
+                if (event.key == pygame.K_LEFT):
+                    leftKey = True
+
+                if (event.key == pygame.K_RIGHT):
+                    rightKey = True
+
+                if (event.key == pygame.K_PAGEUP):
+                    pUpKey = True
+
+                if (event.key == pygame.K_PAGEDOWN):
+                    pDownKey = True
+
+            elif (event.type == pygame.KEYUP):
+
+                if (event.key == pygame.K_a):
+                    aKey = False
+
+                if (event.key == pygame.K_d):
+                    dKey = False
+
+                if (event.key == pygame.K_e):
+                    eKey = False
+
+                if (event.key == pygame.K_q):
+                    qKey = False
+
+                if (event.key == pygame.K_s):
+                    sKey = False
+
+                if (event.key == pygame.K_w):
+                    wKey = False
+
+                if (event.key == pygame.K_UP):
+                    upKey = False
+
+                if (event.key == pygame.K_DOWN):
+                    downKey = False
+
+                if (event.key == pygame.K_LEFT):
+                    leftKey = False
+
+                if (event.key == pygame.K_RIGHT):
+                    rightKey = False
+
+                if (event.key == pygame.K_PAGEUP):
+                    pUpKey = False
+
+                if (event.key == pygame.K_PAGEDOWN):
+                    pDownKey = False
+
+        # Walking keys
+        if aKey:
+            scene.camera.position += vector3(-0.02,0,0)
+
+        if dKey:
+            scene.camera.position += vector3(0.02,0,0)
+
+        if sKey:
+            scene.camera.position += vector3(0,0,-0.02)
+
+        if wKey:
+            scene.camera.position += vector3(0,0,0.02)
+
+        # Rotates the object, considering the time passed (not linked to frame rate)
+        q = from_rotation_vector((axis * math.radians(angle) * delta_time).to_np3())
+
+        #Rotate keys
+        if upKey:
+            axis = vector3(1, 0,0)
+            scene.camera.rotation = q * scene.camera.rotation
+
+        if downKey:
+            axis = vector3(-1, 0,0)
+            scene.camera.rotation = q * scene.camera.rotation
+
+        if leftKey:
+            axis = vector3(0,1,0)
+            scene.camera.rotation = q * scene.camera.rotation
+
+        if rightKey:
+            axis = vector3(0,-1,0)
+            scene.camera.rotation = q * scene.camera.rotation
+
+        if pUpKey:
+            axis = vector3(0,0,1)
+            scene.camera.rotation = q * scene.camera.rotation
+
+        if pDownKey:
+            axis = vector3(0,0,-1)
+            scene.camera.rotation = q * scene.camera.rotation
+
+
+        # Clears the screen with a very dark blue (0, 0, 20)
+        screen.fill((0,0,0))
+        
+        scene.render(screen)
+
+        # Swaps the back and front buffer, effectively displaying what we rendered
+        pygame.display.update()
+
+        # Updates the timer, so we we know how long has it been since the last frame
+        delta_time = time.time() - prev_time
+        prev_time = time.time()
+
+
+# Run the main function
+main()
