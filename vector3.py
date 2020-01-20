@@ -110,10 +110,10 @@ class vector3:
     @staticmethod
     def from_np(np_array):
         return vector3(np_array[0], np_array[1], np_array[2])
+    
+def dot_product(v1, v2):
+    return v1.dot(v2)
 
-    def dot_product(self, v1, v2):
-        return v1.dot(v2)
-
-    def cross_product(self, v1, v2):
-        return v1.cross(v2)
+def cross_product(v1, v2):
+    return v1.cross(v2)
 
