@@ -24,6 +24,7 @@ class Mesh:
             for v in poly:
                 vout = v.to_np4()
                 vout = vout @ matrix
+                
                 tpoly.append( ( screen.get_width() * 0.5 + vout[0] / vout[3], screen.get_height() * 0.5 - vout[1] / vout[3]) )
 
             pygame.draw.polygon(screen, c, tpoly, material.line_width)
@@ -32,9 +33,9 @@ class Mesh:
     def create_pyramid(size, mesh = None):
         if (mesh == None):
             mesh = Mesh("UnknownPyramid")
-
-        Mesh.create_triangle(vector3(-size[0] * 0.5, 0, 0), vector3(0, 0, size[2] * 0.5), vector3(0, size[1] * 0.5, 0), mesh)
+            
         Mesh.create_triangle(vector3(size[0] * 0.5, 0, 0), vector3(0, 0, size[2] * 0.5), vector3(0, size[1] * 0.5, 0), mesh)
+        Mesh.create_triangle(vector3(-size[0] * 0.5, 0, 0), vector3(0, 0, size[2] * 0.5), vector3(0, size[1] * 0.5, 0), mesh)
         Mesh.create_triangle(vector3(0, 0,  size[2] * 0.5), vector3(-size[0] * 0.5, 0), vector3(0, size[1] * 0.5, 0), mesh)
         Mesh.create_triangle(vector3(0, 0, -size[2] * 0.5), vector3( size[0] * 0.5, 0), vector3(0, size[1] * 0.5, 0), mesh)
         
@@ -45,7 +46,7 @@ class Mesh:
     @staticmethod
     def create_triangle(origin, axis0, axis1, mesh):
         if (mesh == None):
-            mesh = Mesh("FacesOfPyramid")
+            mesh = Mesh("UnknownTriangles")
 
         triangles = []
 
@@ -54,22 +55,6 @@ class Mesh:
         triangles.append(origin + axis0 - axis1)
          
         mesh.polygons.append(triangles)
-
-        return mesh
-
-    @staticmethod
-    def create_square(origin, axis0, axis1, mesh):
-        if (mesh == None):
-            mesh = Mesh("PyramidBottom")
-
-        squares = []
-        
-        squares.append(origin - axis0 - axis1)  
-        squares.append(origin + axis0 + axis1) 
-        squares.append(origin - axis0 + axis1)
-        squares.append(origin + axis0 - axis1)
-        
-        mesh.polygons.append(squares)
 
         return mesh
     
