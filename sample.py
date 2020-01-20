@@ -19,8 +19,8 @@ def main():
     mp = pygame.mouse.get_rel()
 
     # Define the size/resolution of our window
-    res_x = 640
-    res_y = 480
+    res_x = 800
+    res_y = 600
 
     # Create a window and a display surface
     screen = pygame.display.set_mode((res_x, res_y))
