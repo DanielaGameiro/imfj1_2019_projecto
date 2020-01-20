@@ -80,6 +80,7 @@ def main():
     keys = [ aKey, dKey, eKey, qKey, sKey, wKey, upKey, downKey, leftKey, rightKey, pUpKey, pDownKey ]
 
     run = True
+    obj = True
 
     # Game loop, runs forever
     while (run):
@@ -87,8 +88,7 @@ def main():
         for event in pygame.event.get():
             # Checks if the user closed the window
             if (event.type == pygame.KEYDOWN):
-
-                if event.key == pygame.K_ESCAPE:
+                if (event.key == pygame.K_ESCAPE):
                     run = False
 
                 if (event.key == pygame.K_a):
@@ -165,47 +165,65 @@ def main():
                 if (event.key == pygame.K_PAGEDOWN):
                     pDownKey = False
 
-        # Walking keys
+        # Moves the object
         if aKey:
-            scene.camera.position += vector3(-0.02,0,0)
+            scene.camera.position += scene.camera.left() * 0.001
 
-        if dKey:
-            scene.camera.position += vector3(0.02,0,0)
+            if dKey:
+                scene.camera.position += scene.camera.right() * 0.001
 
-        if sKey:
-            scene.camera.position += vector3(0,0,-0.02)
+            if sKey:
+                scene.camera.position += scene.camera.back() * 0.001
 
-        if wKey:
-            scene.camera.position += vector3(0,0,0.02)
+            if wKey:
+                scene.camera.position += scene.camera.forward() * 0.001
 
+            if qKey:
+                scene.camera.position += vector3(0,0,0.01)
+
+            if eKey:
+                scene.camera.position -= vector3(0,0,0.01)
+            
         # Rotates the object, considering the time passed (not linked to frame rate)
         q = from_rotation_vector((axis * math.radians(angle) * delta_time).to_np3())
+        scene.camera.rotation = scene.camera.rotation * q
 
         #Rotate keys
         if upKey:
-            axis = vector3(1, 0,0)
+            axis = vector3(3,0,0)
             scene.camera.rotation = q * scene.camera.rotation
 
         if downKey:
-            axis = vector3(-1, 0,0)
+            axis = vector3(-3,0,0)
             scene.camera.rotation = q * scene.camera.rotation
 
         if leftKey:
-            axis = vector3(0,1,0)
+            axis = vector3(0,3,0)
             scene.camera.rotation = q * scene.camera.rotation
 
         if rightKey:
-            axis = vector3(0,-1,0)
+            axis = vector3(0,-3,0)
             scene.camera.rotation = q * scene.camera.rotation
 
         if pUpKey:
-            axis = vector3(0,0,1)
+            axis = vector3(0,0,3)
             scene.camera.rotation = q * scene.camera.rotation
 
         if pDownKey:
-            axis = vector3(0,0,-1)
+            axis = vector3(0,0,-3)
             scene.camera.rotation = q * scene.camera.rotation
+            
+       # Stop objects that are behind the camera from being renderered
+        if (dot_product(scene.camera.forward(), pyr1.forward() - scene.camera.position) < 0):
+            if (obj):
+                scene.remove_object(pyr1)
+                obj = False
+        else:
+            obj = True
+            if (pyr1 not in scene.objects):
+                scene.add_object(pyr1)
 
+        scene.render(screen)
 
         # Clears the screen with a very dark blue (0, 0, 20)
         screen.fill((0,0,0))
@@ -213,7 +231,7 @@ def main():
         scene.render(screen)
 
         # Swaps the back and front buffer, effectively displaying what we rendered
-        pygame.display.update()
+        pygame.display.flip()
 
         # Updates the timer, so we we know how long has it been since the last frame
         delta_time = time.time() - prev_time
