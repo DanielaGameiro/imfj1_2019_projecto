@@ -8,6 +8,10 @@ class Scene:
 
     def add_object(self, obj):
         self.objects.append(obj)
+        
+    def remove_object(self, obj):
+        self.objects.remove(obj)
+        return
 
     def render(self, screen):
         camera_matrix = self.camera.get_camera_matrix()
