@@ -13,8 +13,8 @@ from color import *
 def main():
     # Initialize pygame, with the default parameters
     pygame.init()
+    
     pygame.mouse.set_visible(False)
-
     pygame.event.set_grab(True)
     mp = pygame.mouse.get_rel()
 
@@ -29,30 +29,29 @@ def main():
     scene = Scene("Scene")
     scene.camera = Camera(False, res_x, res_y)
 
-    # Moves the camera back 2 units
-    scene.camera.position -= vector3(0,-1,-1)
+    # Moves the camera back 3 units
+    scene.camera.position += vector3(1, 1, 1)
+    scene.camera.position -= vector3(0,0,3)
 
-    # Create a pyramid and place it in a scene
+    # Create a pyramid and place it in a scene, at position (1,1,1)
+    # This pyramid has 1 unit of side, and is red
     pyr1 = Object3d("UnknownPyramid")
-    pyr1.scale = vector3(3, 3, 3)
-    pyr1.position = vector3(2, 1.5, 12)
-    pyr1.mesh = Mesh.create_pyramid((1, 1, 1))
-    pyr1.material = Material(color(1,0,1,0), "PyramidMaterial")
+    pyr1.scale = vector3(1, 1, 1)
+    pyr1.position = vector3(1, 1, 1)
+    pyr1.mesh = Mesh.create_pyramid((1, 1, 1), None)
+    pyr1.material = Material(color(1,0,0,1), "PyramidMaterial")
     scene.add_object(pyr1)
 
     # Create a second object, and add it as a child of the first object
     # When the first object rotates, this one will also mimic the transform
-    pyr2 = Object3d("UnknownPyramid")
-    pyr2.scale = vector3(11, 11, 11)
-    pyr2.position = vector3(11, 5.5, 17)
-    pyr2.mesh = Mesh.create_pyramid((1, 1, 1))
-    pyr2.material = Material(color(1,1,1,0), "PyramidMaterial")
-    scene.add_object(pyr2)
+    pyr2 = Object3d("ChildPyramid")
+    pyr2.position += vector3(-0.75, -0.25, 0)
+    pyr2.mesh = Mesh.create_pyramid((0.5, 0.5, 0.5))
+    pyr2.material = Material(color(0,1,0,1), "PyramidMaterial")
+    pyr1.add_child(pyr2)
 
-    # Empty list for objects
-    empty_list = []
-    empty_list.append(pyr1)
-    empty_list.append(pyr2)
+    # List of the objects
+    objects = [ pyr1, pyr2 ]
 
     # Specify the rotation of the object. It will rotate 15 degrees around the axis given, 
     # every second
