@@ -13,11 +13,11 @@ __*Link GitHub:*__ <https://github.com/DanielaGameiro/imfj1_2019_projecto>
 >
 > Em relação ao trabalho individual, preferimos trabalhar todos em conjunto, ou seja, reunimo-nos muitas vezes para desenvolver o PF. 
 > 
-> Isso trouxe-nos grandes vantagens para tirar dúvidas e receber dicas de outros colegas nossos que estavam na Universidade também a trablhar nos seus projetos.
+> Isso trouxe-nos grandes vantagens para tirar dúvidas e receber dicas de outros colegas nossos que estavam na Universidade também a trabalhar nos seus projetos.
 
 ## __Dificuldades e Procedimento__ 
-> Podemos considerar uma das dificuldades: utilizar as ferramentos do *GIT* devido ao pouco uso das mesmas. Como já foi referido acima, preferimos trabalhar presencialmente, por isso não explorámos como gostaríamos o *GIT*.
+> Podemos considerar uma das dificuldades: utilizar as ferramentas do *GIT* devido ao pouco uso das mesmas. Como já foi referido acima, preferimos trabalhar presencialmente, por isso não explorámos como gostaríamos o *GIT*.
 >
 > Ao longo do projeto, tivemos várias vezes um erro em relação ao *Pygame* que não conseguíamos corrigir e isso dificultou o processo de correr o código. Porém, conseguimos ultrapassar essa dificuldade. 
 >
-> O segundo ponto do enunciado foi o que nos trouxe mais dificuldades, conseguimos apenas por os objetos a não renderizar quando a câmara não está a olhar para as pirâmides. O restante do segundo ponto não fomos capaz de fazer.
+> O segundo ponto do enunciado foi o que nos trouxe mais dificuldades, conseguimos apenas por os objetos a não renderizar quando a câmara não está a olhar para as pirâmides. O restante do segundo ponto não fomos capazes de fazer.
